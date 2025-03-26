@@ -20,13 +20,7 @@ public class MetricTypeServiceImpl implements MetricTypeService {
 
     @Override
     public List<MetricType> getAvailableTypesForDetail(Long detailId) {
-        List<MetricType> res = metricTypeRepo.findAvailableTypesForDetail(detailId);
-
-        if (res.isEmpty()) {
-            return metricTypeRepo.findAll();
-        }
-
-        return res;
+        return metricTypeRepo.findAvailableTypesForDetail(detailId);
     }
 
     @Override

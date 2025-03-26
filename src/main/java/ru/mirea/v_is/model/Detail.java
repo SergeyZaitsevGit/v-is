@@ -30,6 +30,6 @@ public class Detail {
     @Enumerated(value = EnumType.STRING)
     private DetailStatus detailStatus;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "detail")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "detail", orphanRemoval = true)
     private List<Metric> metrics = new ArrayList<>();
 }

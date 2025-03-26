@@ -13,7 +13,4 @@ public interface MetricTypeRepo extends JpaRepository<MetricType, Long> {
             "(SELECT m.metricType.id FROM Metric m WHERE m.detail.id = :detailId)")
     List<MetricType> findAvailableTypesForDetail(@Param("detailId") Long detailId);
 
-    // Альтернативный вариант, если не хотите использовать @Query
-    List<MetricType> findByIdNotIn(List<Long> excludedIds);
-
 }

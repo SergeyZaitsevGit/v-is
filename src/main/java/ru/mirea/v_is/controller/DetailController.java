@@ -1,6 +1,5 @@
 package ru.mirea.v_is.controller;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,18 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mirea.v_is.model.Detail;
-import ru.mirea.v_is.model.Metric;
-import ru.mirea.v_is.model.MetricForm;
 import ru.mirea.v_is.model.MetricType;
 import ru.mirea.v_is.repo.MetricsRepo;
 import ru.mirea.v_is.service.DetailService;
 import ru.mirea.v_is.service.MetricTypeService;
-import ru.mirea.v_is.service.UserService;
 
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/details")
@@ -64,20 +58,17 @@ public class DetailController {
         return "detail-form";
     }
 
+    @GetMapping("delete/{id}")
+    public String delete(
+            @PathVariable Long id) {
+        detailService.delete(id);
+        return "redirect:/details";
+    }
+
     @PostMapping("/save")
     public String saveDetail(
             @ModelAttribute("detail") Detail detail) {
 
-
-        detail.getMetrics().forEach(metric -> {
-            metric.setDetail(detail);
-            metric.setMetricType(metricTypeService.findById(metric.getMetricType().getId()));
-            metric.setValue(metric.getValue());
-            if (metric.getValue().compareTo(metric.getMetricType().getMinValue()) < 0 ||
-                    metric.getValue().compareTo(metric.getMetricType().getMaxValue()) > 0) {
-                metric.setDefected(true);
-            }
-        });
         detailService.save(detail);
 
 
