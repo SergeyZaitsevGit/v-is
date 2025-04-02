@@ -17,7 +17,7 @@ public class MetricAnalyticsService {
     private final SimpMessagingTemplate messagingTemplate;
     private final MetricsRepo metricRepository;
 
-    @Scheduled(fixedRate = 5000) // Обновление каждые 5 секунд
+    @Scheduled(fixedRate = 5000)
     public void sendAnalytics() {
         List<MetricAnalyticsDTO> analytics = metricRepository.getDailyAverageMetrics();
         messagingTemplate.convertAndSend("/topic/metrics-analytics", analytics);

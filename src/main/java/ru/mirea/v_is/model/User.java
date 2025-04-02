@@ -26,7 +26,7 @@ public class User {
 
     private boolean activite;
 
-    private Role role = Role.USER;
+    private Role role = Role.ROLE_OPERATOR;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Detail> details;

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +29,11 @@ public class DetailController {
 
     @GetMapping
     public String getAllDetails(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer size,
-            @RequestParam(required = false) String keyword,
+            @PageableDefault(
+                    sort = {"id"},
+                    direction = Sort.Direction.DESC) Pageable pageable,
             Model model) {
 
-        Pageable pageable = PageRequest.of(page, size);
         Page<Detail> detailPage = detailService.getDetailByAuthUser(pageable);
 
         model.addAttribute("detailPage", detailPage);
@@ -59,19 +60,14 @@ public class DetailController {
     }
 
     @GetMapping("delete/{id}")
-    public String delete(
-            @PathVariable Long id) {
+    public String delete(@PathVariable Long id) {
         detailService.delete(id);
         return "redirect:/details";
     }
 
     @PostMapping("/save")
-    public String saveDetail(
-            @ModelAttribute("detail") Detail detail) {
-
+    public String saveDetail(@ModelAttribute("detail") Detail detail) {
         detailService.save(detail);
-
-
         return "redirect:/details";
     }
 

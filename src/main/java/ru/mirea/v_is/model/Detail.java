@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class Detail {
 
     @Enumerated(value = EnumType.STRING)
     private DetailStatus detailStatus;
+
+    private LocalDateTime created;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "detail", orphanRemoval = true)
     private List<Metric> metrics = new ArrayList<>();

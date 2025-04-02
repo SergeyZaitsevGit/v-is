@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчеты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <style>
+        .report-table {
+            margin-top: 20px;
+        }
+        .report-actions {
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Список отчетов</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped report-table">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Дата создания</th>
+                    <th>Тип отчета</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="report : ${reports}">
+                    <td th:text="${#temporals.format(report.created, 'dd.MM.yyyy HH:mm')}"></td>
+                    <td th:text="${report.reportType.description}"></td>
+                    <td class="report-actions">
+                        <a th:href="@{/reports/{id}/download(id=${report.id})}"
+                           class="btn btn-sm btn-primary">
+                            Скачать
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

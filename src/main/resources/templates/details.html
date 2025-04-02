@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Детали</title>
@@ -43,8 +44,8 @@
         }
     </script>
 </head>
-<header th:insert="~{blocks/header :: header}"></header>
 <body>
+<header th:insert="~{blocks/header :: header}"></header>
 <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-12 col-xl-11">
@@ -64,6 +65,11 @@
                                         <span class="text-danger" th:if="${detail.detailStatus == T(ru.mirea.v_is.model.DetailStatus).DEFECTIVE}"> - дефектная</span>
                                     </text>
                                     <br>
+                                    <div sec:authorize="hasRole('ROLE_ADMIN')" class="admin-info">
+                                        <p class="card-text"><b>Добавил:</b>
+                                            <span th:text="${detail.user.username + ' (' + detail.user.email + ')'}"/>
+                                        </p>
+                                    </div>
                                     <p class="card-text"><b>Статус:</b>
                                         <span th:text="${detail.detailStatus}"/>
                                     </p>
@@ -127,6 +133,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-8 mx-auto"
+                         th:replace="~{blocks/pagination :: pagination(url = 'details', page = ${detailPage}, keyword = ${keyword}==null ? '' : '&keyword=' + ${keyword})}"></div>
+                </div>
                 </div>
             </div>
         </div>

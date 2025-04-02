@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.mirea.v_is.model.Detail;
-import ru.mirea.v_is.model.User;
+import ru.mirea.v_is.model.*;
 import ru.mirea.v_is.repo.DetailRepo;
 
 import java.time.LocalDateTime;
@@ -32,7 +31,10 @@ public class DetailServiceImpl implements DetailService {
                 metric.setDefected(true);
             }
         });
+        boolean isDefected = detail.getMetrics().stream().anyMatch(Metric::getDefected);
+        detail.setDetailStatus(isDefected ? DetailStatus.DEFECTIVE : DetailStatus.NORMAL);
         detail.setUser(userService.getAuthenticationUser());
+        detail.setCreated(LocalDateTime.now());
         return detailRepo.save(detail);
     }
 
@@ -45,7 +47,11 @@ public class DetailServiceImpl implements DetailService {
     @Override
     @Transactional
     public Page<Detail> getDetailByAuthUser(Pageable pageable) {
-        return detailRepo.getDetailByUser(userService.getAuthenticationUser(), pageable);
+        User authenticationUser = userService.getAuthenticationUser();
+        if (authenticationUser.getRole().equals(Role.ROLE_ADMIN)){
+            return detailRepo.findAll(pageable);
+        }
+        return detailRepo.getDetailByUser(authenticationUser, pageable);
     }
 
     @Override
